@@ -1,0 +1,152 @@
+<html>
+	<head>
+        {% load static %}
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script>
+            var data;
+            var newData;
+
+            function fill(data) {
+
+                var len;
+
+                if (data === undefined) {
+                    len = 0;
+                }else{
+                    len = Object.keys(data).length;
+                }
+                function choice(state, num) {
+                    if(state === 0){
+                        return '<th scope="col" class="col-0"><button onclick="showInfo($num)"><img src="{% static "plus.webp" %}" style="width:20px;height:20px;background-color: transparent;"></button></th>\n'.replace('$num', num)
+                    }else if (state === 1) {
+                        return '<th scope="col" class="col-0">1</th>\n'
+                    }else if (state === 2) {
+                        return '<th scope="col" class="col-0">2</th>\n'
+                    }else if (state === 3){
+                        return '<th scope="col" class="col-0">3</th>\n'
+                    }
+                }
+
+                var i;
+                var inner = '';
+                for (i = 0; i<len; i++) {
+                        inner += '<tr>\n' +
+                        '<th scope="col" class="col-0">$num </th>\n'.replace('$num', i) +
+                        '<th scope="col">$obj</th>\n'.replace('$obj', data[i]['title']) +
+                        '<th scope="col">$empF $empI $empO</th>\n' +
+                        choice(0) +
+                        choice(1) +
+                        choice(1) +
+                        choice(1) +
+                        choice(1) +
+                        choice(1) +
+                        choice(1) +
+                        choice(1) +
+                        choice(1) +
+                        '<th scope="col">{{ item.employee_phone_number }}</th>\n' +
+                        '</tr>';
+
+
+                }
+
+                document.getElementById('tb').innerHTML = inner;
+            }
+
+            function showInfo(button) {
+                document.getElementById('time').innerHTML = "Время: 10:30";
+                document.getElementById('date').innerHTML = "Дата: 3 сентября";
+
+            }
+
+            function httpGetAsync(theUrl)
+            {
+
+                $.ajax({
+                    url: theUrl,
+                    type:"POST",
+                    data:"",
+                    dataType: "JSON",
+                    success: function (result) {
+                        console.log(result)
+                    },
+                    error:function (error) {
+                        console.log('ERROR: '+error)
+                    }
+                    })
+                /*
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.onreadystatechange = function() {
+                    if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
+                        data = JSON.parse(xmlHttp.responseText);
+                        fill(data);
+                    }
+                };
+                xmlHttp.open("POST", theUrl, true); // true for asynchronous
+                xmlHttp.send(null);
+            */
+            }
+            const url='http://185.27.194.131/security/app/today';
+
+            setInterval(httpGetAsync, 10000, url);
+
+
+
+
+        </script>
+    </head>
+	<body>
+        <div id="header" style="height: 10%; width:100%;background-color:#56baed; text-align: right;">
+            <a href="#" style="color:white;position: relative; left: -2%;top:30%">Выйти</a>
+        </div>
+        <div id="linklist" style="text-align: center">
+                <a href="#">Архив</a>&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp<a href="#">Изменение таблиц</a>&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp<a href="#">Окно администратора</a>&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp<a href="#">Отправить доп. рабочего</a>
+            </div>
+        <div id="content" style="background-color:lightgray;display: flex; justify-content: center;">
+
+
+            <div style="width:75%;">
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                          <th scope="col" class="col-0">#</th>
+                          <th scope="col">Объект</th>
+                          <th scope="col">Фамилия</th>
+                          <th scope="col" class="col-0">8</th>
+                          <th scope="col" class="col-0">12</th>
+                          <th scope="col" class="col-0">16</th>
+                          <th scope="col" class="col-0">17</th>
+                          <th scope="col" class="col-0">18</th>
+                          <th scope="col" class="col-0">20</th>
+                          <th scope="col" class="col-0">24</th>
+                          <th scope="col" class="col-0">4</th>
+                          <th scope="col">Режим</th>
+                          <th scope="col">Телефон</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tb">
+
+                    </tbody>
+                </table>
+            </div>
+            &nbsp
+            <div id="information" style="width:25%;background-color: #56baed;">
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                          <th scope="col">Информация</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                          <th scope="col"><p id="time"></p><p id="date"></p></th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <div id="footer" style="height: 10%; background-color: black">
+    </div>
+	</body>
+</html>
